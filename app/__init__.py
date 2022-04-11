@@ -31,6 +31,19 @@ app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
 app.config["JWT_SECRET_KEY"] = "super-secret"  # Change this!
 jwt = JWTManager(app)
 
+app = Flask(__name__)
+app.config["MONGO_URI"] = "mongodb://localhost:27017/bookshelf"
+mongo = PyMongo(app)
+# bycrypt
+bcrypt = Bcrypt(app)
+
+# Setup the Flask-JWT-Extended extension
+app.config['JSON_SORT_KEYS'] = False
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
+app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
+app.config["JWT_SECRET_KEY"] = "super-secret"  # Change this!
+jwt = JWTManager(app)
+
 
 # kafka event
 TOPIC_NAME = "ADITYA-EMAILNA"
@@ -41,6 +54,9 @@ producer = KafkaProducer(
     api_version=(0, 11, 15)
 )
 
+@app.route('/',methods=['GET'])
+def appawal():
+    return {"aditya":"Pangestu"}
 
 @app.route('/kafka', methods=['POST'])
 def kafkaProducer():
@@ -59,3 +75,4 @@ def kafkaProducer():
 
 # root
 from app.books.route import *
+
